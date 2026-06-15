@@ -1,205 +1,358 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🎮 SECRET GAMES</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-    
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-      color: #fff;
-      font-family: 'Press Start 2P', cursive;
-      text-align: center;
-      min-height: 100vh;
-      padding: 40px 20px;
-    }
-    h1 { 
-      font-size: 3rem; 
-      margin-bottom: 40px; 
-      text-shadow: 0 0 20px #ff00ff; 
-      color: #ff00ff;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flexzy Games</title>
 
-    .secret-btn {
-      background: #ff00ff;
-      color: white;
-      border: 4px solid #fff;
-      padding: 25px 60px;
-      font-size: 1.8rem;
-      font-family: 'Press Start 2P', cursive;
-      cursor: pointer;
-      border-radius: 15px;
-      margin: 40px auto;
-      display: block;
-      transition: 0.4s;
-      box-shadow: 0 0 30px #ff00ff;
-    }
-    .secret-btn:hover {
-      background: #00ffff;
-      color: #000;
-      transform: scale(1.1);
-      box-shadow: 0 0 50px #00ffff;
-    }
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap');
 
-    .games-grid {
-      display: none;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 25px;
-      max-width: 800px;
-      margin: 40px auto;
-    }
-    .game-card {
-      background: rgba(255,255,255,0.08);
-      border: 3px solid #00ffff;
-      border-radius: 15px;
-      padding: 25px 15px;
-      transition: 0.3s;
-      cursor: pointer;
-    }
-    .game-card:hover {
-      transform: scale(1.08);
-      box-shadow: 0 0 30px #00ffff;
-    }
-    .game-card h3 {
-      color: #00ffff;
-      font-size: 1.4rem;
-      margin-bottom: 10px;
-    }
+html, body{
+    height:100%;
+}
 
-    .game-container {
-      display: none;
-      margin: 30px auto;
-      max-width: 1000px;
-    }
-    .active { display: block !important; }
+body{
+    margin:0;
+    min-height:100vh;
+    background: radial-gradient(circle at top,
+        #001a1f,
+        #1b5669 60%,
+        #050505);
+    color:#e0e0e0;
+    font-family:'Orbitron',sans-serif;
+    text-align:center;
+}
 
-    iframe {
-      width: 100%;
-      height: 520px;
-      border: 4px solid #fff;
-      border-radius: 10px;
-      background: #000;
-    }
+/* ===== LOADING SCREEN ===== */
+#loadingScreen{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
 
-    .buttons {
-      margin: 20px 0;
-    }
-    button {
-      background: #ff00ff;
-      color: white;
-      border: none;
-      padding: 14px 28px;
-      margin: 8px 5px;
-      font-family: 'Press Start 2P', cursive;
-      cursor: pointer;
-      border-radius: 8px;
-      font-size: 1rem;
-    }
-    button:hover { 
-      background: #00ffff; 
-      color: #000; 
-    }
-    
-    .fullscreen-btn {
-      background: #00ff00;
-      font-size: 1.2rem;
-      padding: 18px 35px;
-      font-weight: bold;
-    }
-    .fullscreen-btn:hover {
-      background: #ffff00;
-      color: #000;
-    }
+    background: radial-gradient(circle at top,
+        #000000,
+        #182a74 60%,
+        #000000);
+}
 
-    .back-btn { background: #444; }
-  </style>
+/* animated background */
+#loadingScreen::before{
+    content:"";
+    position:absolute;
+    width:200%;
+    height:200%;
+    background:linear-gradient(45deg,#00ffcc22,#00aaff22,#ff00ff22);
+    animation:moveBg 6s linear infinite;
+}
+
+@keyframes moveBg{
+    0%{transform:translate(-25%,-25%) rotate(0deg);}
+    100%{transform:translate(-25%,-25%) rotate(360deg);}
+}
+
+.logo{
+    font-size:46px;
+    letter-spacing:6px;
+    color:#00fff0;
+    text-shadow:
+        0 0 10px #00fff0,
+        0 0 25px #00ff88,
+        0 0 35px #0088ff;
+    z-index:2;
+}
+
+/* BAR */
+.loading-bar{
+    width:75%;
+    height:35px;
+    margin-top:40px;
+    background:#111;
+    border:3px solid #00fff0;
+    border-radius:30px;
+    overflow:hidden;
+    z-index:2;
+    box-shadow:0 0 25px #00fff0;
+}
+
+/* PROGRESS */
+.progress{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#00ff88,#00e5ff);
+    box-shadow:0 0 20px #00e5ff;
+}
+
+/* TEXT */
+.subtitle{
+    margin-top:20px;
+    font-size:14px;
+    color:#aaa;
+    letter-spacing:3px;
+    z-index:2;
+    animation:blink 1.5s infinite;
+}
+
+@keyframes blink{
+    50%{opacity:0.4;}
+}
+
+/* ===== MAIN ===== */
+
+h1{
+    color:#d0d0d0;
+    text-shadow:0 0 10px #888;
+    margin:30px 0;
+}
+
+.sidebar{
+    position:fixed;
+    left:15px;
+    top:50%;
+    transform:translateY(-50%);
+    width:220px;
+}
+
+#searchGames,
+.menu-btn{
+    width:100%;
+    padding:12px;
+    margin-bottom:10px;
+    border-radius:10px;
+    border:2px solid #666;
+    background:#1a1a1a;
+    color:#d9d9d9;
+    box-shadow:0 0 12px #555;
+    font-family:'Orbitron',sans-serif;
+}
+
+.menu-btn{
+    cursor:pointer;
+}
+
+.games-grid{
+    display:flex;
+    flex-wrap:wrap;
+    gap:20px;
+    justify-content:center;
+    margin-left:260px;
+    padding:20px;
+}
+
+.game-card{
+    width:150px;
+    height:150px;
+    border:2px solid #666;
+    border-radius:12px;
+    overflow:hidden;
+    position:relative;
+    cursor:pointer;
+}
+
+.game-card img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.game-title{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    background:rgba(0,0,0,.75);
+    color:#ddd;
+}
+
+#gameArea{
+    display:none;
+    padding:20px;
+}
+
+iframe{
+    width:95%;
+    height:700px;
+    border:2px solid #666;
+}
+
+.play-btn{
+    padding:12px 20px;
+    background:#1a1a1a;
+    color:#ddd;
+    border:2px solid #666;
+    box-shadow:0 0 12px #555;
+    font-family:'Orbitron',sans-serif;
+    cursor:pointer;
+}
+</style>
 </head>
+
 <body>
-  <h1>SECRET GAMES</h1>
 
-  <!-- Botón principal SECRET -->
-  <button class="secret-btn" onclick="showSecrets()">
-    SECRET
-  </button>
+<!-- LOADING -->
+<div id="loadingScreen">
+    <h1 class="logo">FLEXZY GAMES</h1>
 
-  <!-- Lista de juegos secretos -->
-  <div class="games-grid" id="secretsMenu">
-    <div class="game-card" onclick="playGame('SECRET 1', 'https://slope3unblocked.github.io/')">
-      <h3>SECRET 1</h3>
+    <div class="loading-bar">
+        <div class="progress"></div>
     </div>
-    <div class="game-card" onclick="playGame('SECRET 2', 'https://1v1lol-unblocked.bitbucket.io/')">
-      <h3>SECRET 2</h3>
-    </div>
-  </div>
 
-  <!-- Área donde se carga el juego -->
-  <div id="gameArea" class="game-container">
-    <h2 id="gameTitle" style="margin-bottom: 15px; color: #00ffff;"></h2>
-    
-    <iframe id="gameFrame" allowfullscreen></iframe>
-    
-    <div class="buttons">
-      <button onclick="openInAboutBlank()" class="fullscreen-btn">
-        🌐 ABRIR EN PANTALLA COMPLETA (about:blank)
-      </button>
-      <button onclick="backToMenu()" class="back-btn">← Volver</button>
-    </div>
-  </div>
+    <div class="subtitle">Loading...</div>
+</div>
 
-  <script>
-    let currentUrl = '';
-    let currentTitle = '';
+<!-- MAIN -->
+<div id="homeScreen">
 
-    function showSecrets() {
-      document.querySelector('.secret-btn').style.display = 'none';
-      document.getElementById('secretsMenu').style.display = 'grid';
-    }
+<div class="sidebar">
+    <input type="text" id="searchGames" placeholder="Buscar juego..." onkeyup="searchGames()">
 
-    function playGame(title, url) {
-      currentTitle = title;
-      currentUrl = url;
-      
-      document.getElementById('secretsMenu').style.display = 'none';
-      document.getElementById('gameArea').classList.add('active');
-      document.getElementById('gameTitle').textContent = title;
-      document.getElementById('gameFrame').src = url;
-    }
+    <button class="menu-btn" onclick="showCategory('game')">Juegos</button>
+    <button class="menu-btn" onclick="showCategory('proxy')">Proxy</button>
+</div>
 
-    function openInAboutBlank() {
-      if (!currentUrl) return;
-      const newTab = window.open('about:blank', '_blank');
-      if (newTab) {
-        newTab.document.write(`
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <title>${currentTitle}</title>
-            <style>
-              body, html { margin:0; padding:0; height:100%; overflow:hidden; background:#000; }
-              iframe { width:100%; height:100%; border:none; }
-            </style>
-          </head>
-          <body>
-            <iframe src="${currentUrl}" allowfullscreen></iframe>
-          </body>
-          </html>
-        `);
-        newTab.document.close();
-      } else {
-        alert("Por favor, permite las ventanas emergentes para abrir en pantalla completa.");
-      }
-    }
+<h1>Flexzy Games</h1>
 
-    function backToMenu() {
-      document.getElementById('gameFrame').src = '';
-      document.getElementById('gameArea').classList.remove('active');
-      document.getElementById('secretsMenu').style.display = 'grid';
-      currentUrl = '';
-      currentTitle = '';
-    }
-  </script>
+<div class="games-grid">
+
+<!-- PROXYS -->
+<div class="game-card" data-category="proxy" onclick="loadGame('PROXY','https://676719.github.io/Proxyhack/')">
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMO6g2UHi9xr_Fth2Xibij4znp9BkdUKT-EQ&s=80">
+<div class="game-title">PROXY</div>
+</div>
+
+<div class="game-card" data-category="proxy" onclick="loadGame('BlockAway','https://blockaway.net/')">
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhPmDrx5R_NzKTs0H6tVlybms-68Kni6L8bGRmNMMYBA&s=80">
+<div class="game-title">BLOCK AWAY</div>
+</div>
+
+<div class="game-card" data-category="proxy" onclick="loadGame('ProxySite','https://www.proxysite.com/')">
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTefYGWUbc3kTtMfHfkngvkYV4hBxYrrFB56YpZGDA9ug&s=80">
+<div class="game-title">PROXY SITE</div>
+</div>
+
+<div class="game-card" data-category="proxy" onclick="loadGame('Croxyproxy','https://www.croxyproxy.com/')">
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVxepYYdLtoHUFLAAFHDdDTPWxBa7aYjgfOc2DNXZ0&s=80">
+<div class="game-title">Croxyproxy</div>
+</div>
+
+<!-- JUEGOS -->
+<div class="game-card" data-category="game" onclick="loadGame('Slope','https://slopegame.io/')">
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbkEhpMuX8FeOg_oipY-8bFO-WHOeKf-EKNw&s=80">
+<div class="game-title">Games 1</div>
+</div>
+
+<div class="game-card" data-category="game" onclick="loadGame('Krunker','https://krunker.io/')">
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuP1rjOK4v52JzwaO1glUgA03sTA9viyOoOw&s=80">
+<div class="game-title">Shooting</div>
+</div>
+
+<div class="game-card" data-category="game" onclick="loadGame('2D Shooting','https://battledudes.io/')">
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUYn9BckeYwm_DS4a1w-o3MH4lsfjlRCwd6g&s=80">
+<div class="game-title">2D Shooting</div>
+</div>
+
+<div class="game-card" data-category="game" onclick="loadGame('Paper.io 3D','https://paperio.site/3d/')">
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkMru2PDO_cZcXdyuB15sADiOj1ZYHgWHGLQ&s=80">
+<div class="game-title">Paper.io 3D</div>
+</div>
+
+<div class="game-card" data-category="game" onclick="loadGame('ROCKET','https://rocketgoal.io/')">
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFnNvoMuBTDqyXW9n6uN5pGvdLUUniTk7IJA&s=80">
+<div class="game-title">ROCKET GOAL</div>
+</div>
+
+  <div class="game-card" data-category="game" onclick="loadGame('FNAF','https://fnaffree.io/')">
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCET8SQgYmNnN8jAnf_5C8H_SPE_97PZf2z69fLM7B&s=80">
+<div class="game-title">FNAF</div>
+</div>
+
+  <div class="game-card" data-category="game" onclick="loadGame('1v1LOL','https://1v1-lol.gitlab.io/')">
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKN6F4_x-ZFPLH0XLZ8-EbUYP97IQVBMaI-J-bwlotoA&s=80">
+<div class="game-title">1v1LOL</div>
+</div>
+
+  
+</div>
+</div>
+
+<!-- GAME AREA -->
+<div id="gameArea">
+<h2 id="gameTitle"></h2>
+<iframe id="gameFrame"></iframe><br><br>
+<button class="play-btn" onclick="backToGames()">← Volver</button>
+</div>
+
+<script>
+function loadGame(title,url){
+ document.getElementById('homeScreen').style.display='none';
+ document.getElementById('gameArea').style.display='block';
+ document.getElementById('gameTitle').textContent=title;
+ document.getElementById('gameFrame').src=url;
+}
+
+function backToGames(){
+ document.getElementById('gameArea').style.display='none';
+ document.getElementById('homeScreen').style.display='block';
+ document.getElementById('gameFrame').src='';
+}
+
+function searchGames(){
+ const input=document.getElementById('searchGames').value.toLowerCase();
+ document.querySelectorAll('.game-card').forEach(card=>{
+   const title=card.querySelector('.game-title').textContent.toLowerCase();
+   card.style.display=title.includes(input)?'block':'none';
+ });
+}
+
+function showCategory(type){
+ const cards = document.querySelectorAll('.game-card');
+
+ cards.forEach(card=>{
+   const category = card.dataset.category;
+
+   if(type === 'game'){
+     card.style.display = category === 'game' ? 'block' : 'none';
+   }
+   else if(type === 'proxy'){
+     card.style.display = category === 'proxy' ? 'block' : 'none';
+   }
+ });
+}
+
+/* LOADING 7s */
+window.onload = function(){
+
+ let progress = 0;
+ const bar = document.querySelector('.progress');
+
+ const duration = 7000;
+ const intervalTime = 50;
+ const steps = duration / intervalTime;
+ const increment = 100 / steps;
+
+ const interval = setInterval(()=>{
+   progress += increment;
+   bar.style.width = progress + '%';
+
+   if(progress >= 100){
+     clearInterval(interval);
+
+     setTimeout(()=>{
+       document.getElementById('loadingScreen').style.display='none';
+       showCategory('game');
+     },300);
+   }
+ }, intervalTime);
+
+};
+</script>
+
 </body>
 </html>
